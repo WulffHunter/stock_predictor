@@ -21,8 +21,8 @@ def save_sequence(sequence, filename):
 
 # Splits a sequence into samples. Each sample is `step_count` elements in length.
 # The X is the sample, the y is the value that comes after the i-th sample
-def split(sequence, step_count):
-    X, y = list(), list()
+def split_into_samples(sequence, step_count):
+    X_y = list()
 
     for i in range(len(sequence)):
         # Find the end of this particular pattern (e.g. 5 elements per step)
@@ -33,19 +33,17 @@ def split(sequence, step_count):
 
         seq_x, seq_y = sequence[i:end_index], sequence[end_index]
 
-        X.append(seq_x)
-        y.append(seq_y)
+        X_y.append([ seq_x, seq_y ])
 
-    return array(X), array(y)
+    return array(X_y)
 
 def main(in_file: "Sequence input in non-binary format (e.g. CSV)",
-         out_file: "Out files title (X file will be saved as ____.X.pkl)",
+         out_file: "Out files title (X_y file will be saved as ____.pkl)",
          step_count: ("The number of steps per sub-sequence", 'option', 's') = 5):
         
     sequence = load_file(in_file)
-    X, y = split(sequence=sequence, step_count=step_count)
-    save_sequence(X, out_file + '.X.pkl')
-    save_sequence(y, out_file + '.y.pkl')
+    X_y = split(sequence=sequence, step_count=step_count)
+    save_sequence(X_y, out_file + '.pkl')
 
 if __name__ == "__main__":
     import plac
