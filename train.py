@@ -23,6 +23,8 @@ def define_model(feature_count, step_count, mode='vanilla'):
 
     model.compile(optimizer='adam', loss='mse')
 
+    return model
+
 
 def train(X, y, feature_count=1, epochs=200, model_file, logs_root_dir, model_mode='vanilla'):
     reshaped_X = X.reshape((X.shape[0], X.shape[1], feature_count))
