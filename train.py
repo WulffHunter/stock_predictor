@@ -1,13 +1,10 @@
 import utils
 
 from numpy import array
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Bidirectional
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense, Bidirectional
 
 # Modes: vanilla, stacked, bidirectional
-
-# API Key: 250U66DFYADEDPQM
-# Sample: https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=DOW&interval=60min&apikey=250U66DFYADEDPQM&datatype=csv
 
 def define_model(feature_count, step_count, mode='vanilla'):
     model = Sequential()
@@ -29,7 +26,13 @@ def define_model(feature_count, step_count, mode='vanilla'):
     return model
 
 
-def train(X, y, model_file, logs_root_dir, feature_count=1, epochs=200, model_mode='vanilla'):
+def train(X, y,
+          model_file,
+          logs_root_dir,
+          feature_count=1,
+          epochs=200,
+          model_mode='vanilla',
+          tensorboard_on=True):
     reshaped_X = X.reshape((X.shape[0], X.shape[1], feature_count))
 
     model = define_model(feature_count, X.shape[1], mode=model_mode)
@@ -57,17 +60,22 @@ def main(in_file: "Input raw file in numpy binary format (use the first part of 
          logs_root_dir: ("Name of the TensorBoard log directory", 'option', 'l') = 'logs/fit/',
          model_mode: ("The type of model to use. Can be Vanilla, Stacked, or Bidirectional", 'option', 'm') = 'vanilla',
 ):
-    X_y = utils.load_sequence(in_file + '.pkl')
+    X_y = utils.load_sequence(in_file)
 
     X = array(X_y[:, 0])
+    X.shape = (X.size, 1)
+
     y = array(X_y[:, 1])
 
-    train(X, y,
-          model_file=model_file,
-          logs_root_dir=logs_root_dir,
-          feature_count=1,
-          epochs=200,
-          model_mode=model_mode)
+    print(X)
+
+    # train(X, y,
+    #       model_file=model_file,
+    #       logs_root_dir=logs_root_dir,
+    #       feature_count=1,
+    #       epochs=200,
+    #       model_mode=model_mode,
+    #       tensorboard_on=True)
 
 
 if __name__ == "__main__":

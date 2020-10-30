@@ -40,7 +40,8 @@ def main(in_file: "Input raw file in numpy binary format",
                          f'the maximum number of observations (set to {max_observations}). '
                          f'Reduce the max_observations value.')
     n_sequences = max_observations
-    dataset = raw_dataset[:n_sequences, :]
+    dataset = np.array(raw_dataset[:n_sequences, :])
+    print(dataset)
     # random shuffle
     # note that we do not need it for the toy example (based on how we currently generate the data)
     # but let's keep it here for completeness
