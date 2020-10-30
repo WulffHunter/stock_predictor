@@ -6,6 +6,9 @@ from keras.layers import LSTM, Dense, Bidirectional
 
 # Modes: vanilla, stacked, bidirectional
 
+# API Key: 250U66DFYADEDPQM
+# Sample: https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=DOW&interval=60min&apikey=250U66DFYADEDPQM&datatype=csv
+
 def define_model(feature_count, step_count, mode='vanilla'):
     model = Sequential()
 
@@ -26,7 +29,7 @@ def define_model(feature_count, step_count, mode='vanilla'):
     return model
 
 
-def train(X, y, feature_count=1, epochs=200, model_file, logs_root_dir, model_mode='vanilla'):
+def train(X, y, model_file, logs_root_dir, feature_count=1, epochs=200, model_mode='vanilla'):
     reshaped_X = X.reshape((X.shape[0], X.shape[1], feature_count))
 
     model = define_model(feature_count, X.shape[1], mode=model_mode)
@@ -60,10 +63,10 @@ def main(in_file: "Input raw file in numpy binary format (use the first part of 
     y = array(X_y[:, 1])
 
     train(X, y,
-          feature_count=1,
-          epochs=200,
           model_file=model_file,
           logs_root_dir=logs_root_dir,
+          feature_count=1,
+          epochs=200,
           model_mode=model_mode)
 
 
