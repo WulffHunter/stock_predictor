@@ -40,10 +40,11 @@ def split_into_samples(sequence, step_count):
 
         seq_x, seq_y = sequence[i:end_index], sequence[end_index]
 
-        X_y.append(array( seq_x, seq_y ))
+        # Append the X, y tuple to the array
+        X_y.append((array(seq_x), seq_y))
 
     print(X_y)
-    return array(X_y)
+    return array(X_y, dtype=object)
 
 def main(in_file: "Sequence input in non-binary format (e.g. CSV)",
          out_file: "Out files title (X_y file will be saved as ____.pkl)",

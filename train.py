@@ -1,6 +1,9 @@
 import utils
+import datetime
+import os
 
-from numpy import array
+import numpy as np
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Bidirectional
 
@@ -26,16 +29,18 @@ def define_model(feature_count, step_count, mode='vanilla'):
     return model
 
 
-def train(X, y,
+def train(train_X, train_y,
+          test_X, test_y,
           model_file,
           logs_root_dir,
           feature_count=1,
           epochs=200,
           model_mode='vanilla',
           tensorboard_on=True):
-    reshaped_X = X.reshape((X.shape[0], X.shape[1], feature_count))
+    train_X = train_X.reshape((train_X.shape[0], train_X.shape[1], feature_count))
+    test_X = test_X.reshape((test_X.shape[0], test_X.shape[1], feature_count))
 
-    model = define_model(feature_count, X.shape[1], mode=model_mode)
+    model = define_model(feature_count, train_X.shape[1], mode=model_mode)
 
     # generate the callbacks
     my_callbacks = []
@@ -48,34 +53,41 @@ def train(X, y,
         my_callbacks.append(TensorBoard(log_dir=log_dir, histogram_freq=1))
     
     # Add a checkpoint saver
-    checkpoint = ModelCheckpoint(model_file, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+    checkpoint = ModelCheckpoint(model_file,
+                                 monitor='val_loss',
+                                 verbose=1,
+                                 save_best_only=True,
+                                 mode='min')
+
     my_callbacks.append(checkpoint)
 
-    model.fit(X, y, epochs=200, verbose=2, callbacks=my_callbacks)
+    model.fit(train_X, train_y,
+              validation_data=(test_X, test_y),
+              epochs=epochs,
+              verbose=2,
+              callbacks=my_callbacks)
 
 
-def main(in_file: "Input raw file in numpy binary format (use the first part of the name)",
+def main(train_file: "The training data file",
+         test_file: "The validation data file",
          model_file: "Model file name",
          epochs: ("Training: number of epochs", 'option', 'e') = 200,
          logs_root_dir: ("Name of the TensorBoard log directory", 'option', 'l') = 'logs/fit/',
          model_mode: ("The type of model to use. Can be Vanilla, Stacked, or Bidirectional", 'option', 'm') = 'vanilla',
 ):
-    X_y = utils.load_sequence(in_file)
+    train_X, train_y = utils.get_X_y(train_file)
+    test_X, test_y = utils.get_X_y(test_file)
 
-    X = array(X_y[:, 0])
-    X.shape = (X.size, 1)
+    # print(type(model_file))
 
-    y = array(X_y[:, 1])
-
-    print(X)
-
-    # train(X, y,
-    #       model_file=model_file,
-    #       logs_root_dir=logs_root_dir,
-    #       feature_count=1,
-    #       epochs=200,
-    #       model_mode=model_mode,
-    #       tensorboard_on=True)
+    train(train_X, train_y,
+          test_X, test_y,
+          model_file=model_file,
+          logs_root_dir=logs_root_dir,
+          feature_count=1,
+          epochs=epochs,
+          model_mode=model_mode,
+          tensorboard_on=True)
 
 
 if __name__ == "__main__":
