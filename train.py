@@ -78,8 +78,6 @@ def main(train_file: "The training data file",
     train_X, train_y = utils.get_X_y(train_file)
     test_X, test_y = utils.get_X_y(test_file)
 
-    # print(type(model_file))
-
     train(train_X, train_y,
           test_X, test_y,
           model_file=model_file,
