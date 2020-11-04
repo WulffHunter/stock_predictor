@@ -9,4 +9,4 @@ mkdir -p ./data/
 SYMBOL=${1:-"DOW"}
 
 # Download the CSV into the `data` directory
-wget -P ./data/ "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${SYMBOL}&outputsize=full&apikey=250U66DFYADEDPQM&datatype=csv"
+curl -o ./data/daily_"$SYMBOL".csv "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${SYMBOL}&outputsize=full&apikey=250U66DFYADEDPQM&datatype=csv"
