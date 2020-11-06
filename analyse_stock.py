@@ -1,3 +1,5 @@
+# Code only barely modified from https://www.kaggle.com/raoulma/ny-stock-price-prediction-rnn-lstm-gru/data?select=prices-split-adjusted.csv
+
 import numpy as np
 import pandas as pd
 import math
