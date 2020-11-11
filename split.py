@@ -3,18 +3,6 @@ from pickle import dump
 
 import pandas as pd
 
-# # load a dataset
-# def load_file(filename):
-#     dat_binary = []
-#     with open(input_file_name, "r") as f:
-#         line_cnt = 0
-#         for line in f:
-#             curr_val = line.rstrip("\n")
-#             dat_binary.append(curr_val)
-#             line_cnt = line_cnt + 1
-
-#     return dat_binary
-
 def load_csv(filename):
     datafile = pd.read_csv(filename)
     
@@ -43,14 +31,12 @@ def split_into_samples(sequence, step_count):
         # Append the X, y tuple to the array
         X_y.append((array(seq_x), seq_y))
 
-    print(X_y)
     return array(X_y, dtype=object)
 
 def main(in_file: "Sequence input in non-binary format (e.g. CSV)",
          out_file: "Out files title (X_y file will be saved as ____.pkl)",
          step_count: ("The number of steps per sub-sequence", 'option', 's') = 5):
-        
-    # sequence = load_file(in_file)
+
     sequence = load_csv(in_file)
 
     X_y = split_into_samples(sequence=sequence, step_count=step_count)
