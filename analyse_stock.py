@@ -9,7 +9,8 @@ import datetime
 import os
 import matplotlib.pyplot as plt
 
-def main(stock: "The training data file"):
+def main(stock: "The training data file",
+         show_plots: ("Whether or not to display the plots to the users", 'flag', 's') = False):
     stock_filename = "./data/daily_" + stock + ".csv"
     figures_dir = "figures/"
 
@@ -34,7 +35,9 @@ def main(stock: "The training data file"):
     plt.ylabel('Price')
     plt.legend(loc='best')
     plt.savefig(figures_dir + "/" + stock + "_changes.png")
-    plt.show()
+    
+    if show_plots:
+        plt.show()
 
     # Display figures regarding the volume
     plt.subplot(1,2,2)
@@ -44,7 +47,9 @@ def main(stock: "The training data file"):
     plt.ylabel('Volume')
     plt.legend(loc='best')
     plt.savefig(figures_dir + "/" + stock + "_volume.png")
-    plt.show()
+    
+    if show_plots:
+        plt.show()
 
     # function for min-max normalization of stock
     def normalize_data(df):
@@ -78,13 +83,17 @@ def main(stock: "The training data file"):
     plt.ylabel('Normalized price/volume')
     plt.legend(loc='best')
     plt.savefig(figures_dir + "/" + stock + "_normalized.png")
-    plt.show()
+    
+    if show_plots:
+        plt.show()
 
     # Display histograms of the stock information
     df.hist(figsize=(12, 12))
     plt.title(stock + ' histograms')
     plt.savefig(figures_dir + "/" + stock + "_histograms.png")
-    plt.show()
+    
+    if show_plots:
+        plt.show()
 
     # Display figures regarding the moving average
     ma_day = [10, 20, 50]
@@ -102,18 +111,24 @@ def main(stock: "The training data file"):
     df_stock_ma[ma_cols].plot()
     plt.title(stock + ' moving averages')
     plt.savefig(figures_dir + "/" + stock + "_moving_average.png")
-    plt.show()
+    
+    if show_plots:
+        plt.show()
 
     df_stock_ma['Daily Return'] = df_stock_ma['close'].pct_change()
     df_stock_ma['Daily Return'].plot(legend=True, linestyle='--', marker='o')
     plt.title(stock + ' daily return')
     plt.savefig(figures_dir + "/" + stock + "_daily_return.png")
-    plt.show()
+    
+    if show_plots:
+        plt.show()
 
     df_stock_ma['Daily Return'].hist()
     plt.title(stock + ' daily return histogram')
     plt.savefig(figures_dir + "/" + stock + "_daily_return_histogram.png")
-    plt.show()
+    
+    if show_plots:
+        plt.show()
 
 if __name__ == "__main__":
     import plac
