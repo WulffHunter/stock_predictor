@@ -6,7 +6,7 @@ def load_sequence(filename):
     return load(open(filename, 'rb'))
 
 def get_X_y(filename):
-    X_y = load_sequence(filename)
+    X_y = np.array(load_sequence(filename))
 
     X = np.vstack(X_y[:, 0])
     # Fix some Tensorflow errors

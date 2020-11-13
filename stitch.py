@@ -1,10 +1,11 @@
 '''
 Stitches multiple pkl files together into one
 '''
-import itertools
 from pickle import dump
 
 from utils import load_sequence
+
+import numpy as np
 
 
 def main(out_file: "The final stitched dataset",
@@ -19,6 +20,9 @@ def main(out_file: "The final stitched dataset",
             stitched = dataset
         else:
             stitched = [ *stitched, *dataset ]
+
+    # Convert to numpy array
+    stitched = np.array(stitched)
 
     print(f'Stitched file length: {len(stitched)}')
 
