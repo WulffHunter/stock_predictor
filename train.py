@@ -15,7 +15,7 @@ def define_model(feature_count, step_count, mode='vanilla'):
     if mode == 'vanilla':
         model.add(LSTM(50, activation='relu', input_shape=(step_count, feature_count)))
     elif mode == 'stacked':
-        model.add(LSTM(50, activation='relu', input_shape=(step_count, feature_count)))
+        model.add(LSTM(50, activation='relu', return_sequences=True, input_shape=(step_count, feature_count)))
         model.add(LSTM(50, activation='relu'))
     elif mode == 'bidirectional':
         model.add(Bidirectional(LSTM(50, activation='relu'), input_shape=(step_count, feature_count)))
