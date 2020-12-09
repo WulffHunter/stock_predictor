@@ -99,7 +99,7 @@ def main(model_file: "The filename of the trained model",
     print(f"Test set R^2 score: {test_r2}")
 
     if use_blind:
-        blind_pred = predict_from_seed(model, test_x)
+        blind_pred = predict_from_seed(model, test_x, blind_iterations)
         # blind_accuracy = accuracy(test_y, blind_pred)
         # blind_precision = sklearn.metrics.precision_score(test_y, blind_pred)
         blind_r2 = sklearn.metrics.r2_score(test_y[:blind_pred.shape[0]], blind_pred)
