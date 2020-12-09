@@ -30,12 +30,18 @@ def get_set_predictions(model, set_to_predict, is_lr_model=False):
 
     return np.array(y_pred)
 
-def predict_from_seed(model, seed_set):
+def predict_from_seed(model, seed_set, iterations=None):
     y_pred = list()
 
     # Make the starting seed the earliest available number
     seed = list(seed_set[0, :])
-    for i in range(seed_set.shape[0]):
+
+    max_iters = seed_set.shape[0]
+
+    if iterations is not None:
+        max_iters = iterations
+
+    for i in range(max_iters):
         X = reshape_data(np.array([seed]))
         # Predict from the current seed set
         prediction = model.predict(X, verbose=0)[0][0]
@@ -57,7 +63,11 @@ def main(model_file: "The filename of the trained model",
          test_file: "The filename for data that the model has not yet seen",
          plot_filename: ("The filename of the data plot", 'option', 'i') = None,
          use_blind: ("Use blind prediction", 'flag', 'b') = False,
+         blind_iterations: ("The number of blind predictions to calculate", 'option', 'bi') = None,
          use_linear_regression: ("Train and plot a linear regression model", 'flag', 'lr') = False):
+    if blind_iterations is not None:
+        blind_iterations = int(blind_iterations)
+
     train_x, train_y = utils.get_X_y(train_file)
     valid_x, valid_y = utils.get_X_y(valid_file)
     test_x, test_y = utils.get_X_y(test_file)
@@ -92,7 +102,7 @@ def main(model_file: "The filename of the trained model",
         blind_pred = predict_from_seed(model, test_x)
         # blind_accuracy = accuracy(test_y, blind_pred)
         # blind_precision = sklearn.metrics.precision_score(test_y, blind_pred)
-        blind_r2 = sklearn.metrics.r2_score(test_y, blind_pred)
+        blind_r2 = sklearn.metrics.r2_score(test_y[:blind_pred.shape[0]], blind_pred)
         # print(f"Blind prediction accuracy: {blind_accuracy}")
         # print(f"Blind set precision: {blind_precision}")
         print(f"Blind set R^2 score: {blind_r2}")
