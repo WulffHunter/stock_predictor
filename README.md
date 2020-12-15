@@ -107,3 +107,18 @@ To aid in this, one could print the symbols of all of the stocks in their `./dat
 ```
 ./print_all_stocks.sh
 ```
+
+
+## Automation
+
+To make replicating results easier, automation scripts have been included:
+
+```
+python3 automate_split.py
+```
+runs the `split.py` and `make_train_test_split.py` scripts on all of the files in the `./data/` directory, and
+
+```
+python3 evaluate_automation.py
+```
+evaluates all of the cluster models in the `./cluster_data/` directory.
