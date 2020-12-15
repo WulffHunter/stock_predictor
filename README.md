@@ -1,9 +1,11 @@
 # CPS803 Stock Predictor
 
-> By Jared Rand, Diwei Guan, and Gil Litvak
+By Jared Rand, Diwei Guan, and Gil Litvak
 
 ## How to get set up
-Please note that all of the code is intended for a Unix or Unix-like environment. Additionally, this project requires the user to have Python 3 installed.
+> The following steps are essential to run any code
+
+> Please note that all of the code is intended for a Unix or Unix-like environment. Additionally, this project requires the user to have Python 3 installed.
 
 ### Creating the venv
 Run the following command in your favourite terminal:
@@ -18,6 +20,39 @@ Run the following command in your favourite terminal:
 ```
 source stock_predictor/bin/activate
 ```
+
+
+---
+
+
+## Training and evaluating a model
+
+> **NOTE:** The following section is used for quickly training the models described in our paper. If you're interested in running the entire pipeline yourself or not using the default settings, see the section `Running the scripts` below.
+
+For ease of use in replicating our results as described in our paper, we created an automated script called `train_full_model.py`, which can download data, process said data, train, and evaluate a model for any cluster or the `M_A` (all-stock) model.
+
+One can use the option `-m` to choose the type of model to train: `vanilla` (single-LSTM), `stacked`, or `bidirectional`.
+
+For any given cluster, run the following command:
+```
+python3 train_full_model.py -c $CLUSTER_NUMBER -m $MODEL_MODE
+```
+where `$CLUSTER_NUMBER` is the number of the cluster, e.g. `1`, `2`, ...`12`, and `$MODEL_MODE` is `vanilla` (single-LSTM), `stacked`, or `bidirectional`.
+
+To use the `M_A` model, simply omit the `-c` option, by typing:
+```
+python3 train_full_model.py -m $MODEL_MODE
+```
+
+One can find the figures output by evaluation in the directory `./figures/cluster_$CLUSTER_NUMBER` (for clusters) or `./figures/M_A` for the `M_A` model.
+
+
+---
+
+
+## Running the scripts
+
+> **NOTE:** The following section describes how to run all of the scripts individually. If you're interested in quickly training and evaluating one of the cluster models described in our paper, see the section `Training and evaluating a model` above.
 
 ### Downloading data
 To download the dataset of a single stock, use the command `./download_data.sh` followed by the symbol of the stock you're trying to download. For example, in order to download the Apple Inc. stock (AAPL), run the following command:
@@ -107,6 +142,9 @@ To aid in this, one could print the symbols of all of the stocks in their `./dat
 ```
 ./print_all_stocks.sh
 ```
+
+
+---
 
 
 ## Automation

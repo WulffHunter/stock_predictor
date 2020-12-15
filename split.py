@@ -41,7 +41,7 @@ def main(in_file: "Sequence input in non-binary format (e.g. CSV)",
 
     X_y = split_into_samples(sequence=sequence, step_count=step_count)
 
-    print(X_y)
+    # print(X_y)
 
     save_sequence(X_y, out_file + '.pkl')
 
